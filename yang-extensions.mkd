@@ -1,7 +1,7 @@
 ---
 title: Extending YANG modules at runtime
 abbrev: yang-extensions
-docname: draft-richardson-netmod-atrest-extensions
+docname: draft-richardson-netmod-atrest-extensions-00
 
 # stand_alone: true
 
