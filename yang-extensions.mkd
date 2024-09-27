@@ -25,7 +25,6 @@ author:
   email: mcr+ietf@sandelman.ca
 
 normative:
-  BCP14: RFC8174
 
 informative:
   RFC8366:
