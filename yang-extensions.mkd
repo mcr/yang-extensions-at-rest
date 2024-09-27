@@ -30,6 +30,10 @@ normative:
 informative:
   RFC8366:
 
+venue:
+  mail: cbor@ietf.org
+  github: mcr/yang-extensions-at-reset
+
 --- abstract
 
 This document describes a mechanism of signaling extensions to YANG modules that
