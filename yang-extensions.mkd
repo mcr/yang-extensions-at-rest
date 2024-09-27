@@ -1,0 +1,100 @@
+---
+title: Extending YANG modules at runtime
+abbrev: yang-extensions
+docname: draft-richardson-netmod-atrest-extensions
+
+# stand_alone: true
+
+ipr: trust200902
+area: Internet
+wg: NETMOD Working Group
+kw: Internet-Draft
+cat: std
+
+coding: utf-8
+pi:
+  toc: yes
+  sortrefs:   # defaults to yes
+  symrefs: yes
+
+author:
+
+- ins: M. Richardson
+  name: Michael Richardson
+  org: Sandelman Software Works
+  email: mcr+ietf@sandelman.ca
+
+normative:
+  BCP14: RFC8174
+
+informative:
+  RFC8366:
+
+--- abstract
+
+This document describes a mechanism of signaling extensions to YANG modules that
+can be used when YANG is not used in an online fashion.
+
+--- middle
+
+# Introduction
+
+In the process of revising {{?RFC8366}} to accomodate needed extensions an effort was initially made to do this using augment (cite) and later augment-structure.
+{{?RFC8366}} is a digitally signed voucher format used in onboarding of new devices.
+It is a file format that may be transmitted over CoAP, HTTP or via USB key, but it does not use RESTCONF.  The contents of the file are not subject to negotiation as might be done with
+{{?RFC8528}}.
+
+Rather than have each topic document define the relevant extensions needed, it turned out to be necessary to collect all the extensions necessary into a single revision to the YANG module, which is being produced as {{?I-D.ietf-anima-rfc8366bis}}.
+
+{{?RFC8520}} is like {{?RFC8366}}: it is a file format.  When {{?RFC8520}} was defined, it anticipated that there would be future extensions, and defined a YANG leaf called "extensions"
+which is a list of subsequent YANG modules which are included.  This is being used to define, for instance, {{?I-D.ietf-opsawg-ol}}.
+
+When YANG is serialized to XML or JSON, the keys used in the attribute map are strings, and so it seems relatively straightforward for a human programmer to understand how to insert these new keys into the same attribute map.
+YANG however, is intended to be machine parseable, and {{!RFC9254}} provides a way to serialize YANG to CBOR.  While strings can be used if necessary, the preferred method is via YANG-SID values, allocated for instance, via {{!RFC9595}}.
+It is not obvious how an extension mechanism as described by {{?RFC8520}} can be efficiently encoded to CBOR, nor how YANG tooling should react to these ad-hoc extensions.
+
+This document makes the {{?RFC8520}} extension mechanism a generic mechanism that can be used by any YANG module, and explains how to efficiently encode this to CBOR using YANG-SID.
+
+# Terminology
+
+{::boilerplate bcp14-tagged}
+
+## Motivation
+
+XXX - Do we need more details about the motivation?
+
+# Protocol
+
+## Extensions
+
+A YANG module that expects to have extensions establishes an attribute called "extensions"
+This attribute value is a list of extensions that are included in this object.
+This set of available values is established as an IANA registry by the document defining the module.
+
+(XXX- this assumes per-module extensions, vs a global set of extensions that could be used by many modules)
+
+When encoding YANG as CBOR, in order to encode the additional attributes defined by that extension, a new sub-map is created.
+The key for this sub-map, in the parent map, consists of the YANG module SID, encoded using the CBOR Tag 47, the tag for an absolute SID.
+Within the sub-map, the normal delta-encoding is used, using the SID values allocated for that module.
+
+(XXX- the submap should allow to XML and JSON too?)
+
+# Privacy Considerations
+
+YYY
+
+# Security Considerations
+
+ZZZ
+
+# IANA Considerations
+
+# Acknowledgements
+
+Hello.
+
+# Changelog
+
+
+--- back
+
