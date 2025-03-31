@@ -72,15 +72,23 @@ XXX - Do we need more details about the motivation?
 
 A YANG module that expects to have extensions establishes an attribute called "extensions"
 This attribute value is a list of extensions that are included in this object.
-This set of available values is established as an IANA registry by the document defining the module.
+
+This set of available values is established as an IANA registry by the document defining this module.
 
 (XXX- this assumes per-module extensions, vs a global set of extensions that could be used by many modules)
+
+Extension documents are presented as new YANG modules.
+They are *not* defined using augment against the original module.
 
 When encoding YANG as CBOR, in order to encode the additional attributes defined by that extension, a new sub-map is created.
 The key for this sub-map, in the parent map, consists of the YANG module SID, encoded using the CBOR Tag 47, the tag for an absolute SID.
 Within the sub-map, the normal delta-encoding is used, using the SID values allocated for that module.
 
-(XXX- the submap should allow to XML and JSON too?)
+When encoding YANG as JSON, a sub-map is also used.
+The key for the sub-map is the YANG module name for the extension.
+Within the sub-map, normal JSON encoding rules are used.
+(This is in contrast to example in {{?RFC8520}} in which a colon-joined key is used, and no sub-map is used)
+
 
 # Privacy Considerations
 
@@ -98,6 +106,9 @@ Hello.
 
 # Changelog
 
-
 --- back
+
+# Appendix A: Example module and extension
+
+TODO.
 
